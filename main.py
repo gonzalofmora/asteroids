@@ -1,6 +1,7 @@
 # this allows us to use code from
 # the open-source pygame library
 # throughout this file
+import sys
 import pygame
 from constants import SCREEN_WIDTH, SCREEN_HEIGHT, ASTEROID_MIN_RADIUS, ASTEROID_KINDS, ASTEROID_SPAWN_RATE, ASTEROID_MAX_RADIUS
 from player import Player
@@ -21,7 +22,7 @@ def main():
     Player.containers = (updatable, drawable)
     Asteroid.containers = (asteroids, updatable, drawable)
     AsteroidField.containers = (updatable)
-    Shot.containers = (updatable, drawable)
+    Shot.containers = (shots, updatable, drawable)
     clock = pygame.time.Clock()
     dt = 0
     x = SCREEN_WIDTH / 2
@@ -37,7 +38,14 @@ def main():
         for object in updatable:
             object.update(dt)
         for asteroid in asteroids:
-            asteroid.has_collided(player)
+            if asteroid.has_collided(player):
+                print("Game over!")
+                sys.exit()
+            for shot in shots:
+                print("Ast: ", asteroid.position, asteroid.radius, "Shot: ", shot.position, shot.radius)
+                if asteroid.has_collided(shot):
+                    asteroid.kill()
+                    shot.kill()
         for object in drawable:
             object.draw(screen)
         pygame.display.flip()

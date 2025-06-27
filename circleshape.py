@@ -1,4 +1,3 @@
-import sys
 import pygame
 
 # Base class for game objects
@@ -23,10 +22,12 @@ class CircleShape(pygame.sprite.Sprite):
         pass
 
     def has_collided(self, circle_object):
+
         distance = self.position.distance_to(circle_object.position)
+        #print("A: ", self.position, "r: ", self.radius, "S: ", circle_object.position, "r: ", circle_object.radius, "d: ", distance)
+
         r1 = self.radius 
         r2 = circle_object.radius
         if distance <= (r1 + r2):
-            print('Game over!')
-            sys.exit()
-
+            return True
+        return False
